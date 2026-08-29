@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preço Baixo Não Ganha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,440;0,9..144,600;1,9..144,440&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #FAF8F6;
+    --bg-alt: #F3EEE9;
+    --ink: #241C2C;
+    --ink-soft: #5B5163;
+    --purple: #6B2D8C;
+    --purple-deep: #3D1854;
+    --purple-wash: #F1E6F6;
+    --purple-wash-2: #E7D5F0;
+    --gold: #AD8548;
+    --rust: #A8503A;
+    --rust-wash: #F5E6E0;
+    --line: #E3DAD0;
+    --card-bg: #FFFFFF;
+    --shadow: 0 20px 60px -30px rgba(61, 24, 84, 0.25);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17111C;
+      --bg-alt: #1F1826;
+      --ink: #F3ECF6;
+      --ink-soft: #B7A9C2;
+      --purple: #B27FCB;
+      --purple-deep: #E3C9EF;
+      --purple-wash: #2B1E36;
+      --purple-wash-2: #38253F;
+      --gold: #D2AC74;
+      --rust: #D98E77;
+      --rust-wash: #33201C;
+      --line: #382C41;
+      --card-bg: #1F1826;
+      --shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17111C;
+    --bg-alt: #1F1826;
+    --ink: #F3ECF6;
+    --ink-soft: #B7A9C2;
+    --purple: #B27FCB;
+    --purple-deep: #E3C9EF;
+    --purple-wash: #2B1E36;
+    --purple-wash-2: #38253F;
+    --gold: #D2AC74;
+    --rust: #D98E77;
+    --rust-wash: #33201C;
+    --line: #382C41;
+    --card-bg: #1F1826;
+    --shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    scroll-snap-type: y proximity;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+
+  ::selection { background: var(--purple); color: #fff; }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 440;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .accent { color: var(--purple); font-style: italic; font-weight: 440; }
+  .accent-rust { color: var(--rust); font-style: italic; font-weight: 440; }
+
+  b, strong { color: var(--purple); font-weight: 700; }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); display: inline-block; }
+
+  section {
+    min-height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 8vw, 8rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .slide-index {
+    position: absolute;
+    top: clamp(1.5rem, 4vw, 3rem);
+    left: clamp(1.5rem, 8vw, 8rem);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+  }
+  .slide-index span { color: var(--purple); font-weight: 700; }
+
+  .brandmark {
+    position: absolute;
+    top: clamp(1.5rem, 4vw, 3rem);
+    right: clamp(1.5rem, 8vw, 8rem);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .nav-dots {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 50;
+  }
+  .nav-dots a {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--line);
+    border: 1px solid transparent;
+    transition: background 0.25s, transform 0.25s;
+    display: block;
+  }
+  .nav-dots a:hover, .nav-dots a:focus-visible { background: var(--purple); transform: scale(1.3); outline: none; }
+  @media (max-width: 720px) { .nav-dots { display: none; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    background:
+      radial-gradient(circle at 85% 10%, var(--purple-wash) 0%, transparent 45%),
+      radial-gradient(circle at 8% 92%, var(--rust-wash) 0%, transparent 40%),
+      var(--bg);
+    justify-content: space-between;
+  }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); padding-top: 2rem;
+  }
+  .hero-mid { margin: auto 0; }
+  .hero-mid .eyebrow { margin-bottom: 1.6rem; }
+  .hero-title { font-size: clamp(2.6rem, 7.6vw, 5.8rem); line-height: 1.02; max-width: 17ch; }
+  .hero-sub { margin-top: 1.8rem; font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink-soft); max-width: 46ch; font-weight: 500; }
+  .hero-bottom {
+    display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 1.5rem;
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--ink-soft); letter-spacing: 0.05em;
+  }
+  .hero-bottom strong { color: var(--purple); }
+
+  /* ---------- Generic ---------- */
+  .section-head { max-width: 62ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .section-title { font-size: clamp(2rem, 4.2vw, 3.2rem); margin-top: 0.9rem; }
+  .lede { font-size: clamp(1.02rem, 1.4vw, 1.2rem); color: var(--ink-soft); max-width: 58ch; line-height: 1.6; margin-top: 1.1rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 3rem); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 2.5vw, 2rem); }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.5rem, 2.5vw, 2.2rem); }
+
+  /* ---------- Slide 2: A ameaça ---------- */
+  .threat-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 4vw, 3.5rem); align-items: stretch; }
+  @media (max-width: 900px) { .threat-wrap { grid-template-columns: 1fr; } }
+
+  .compare-col {
+    border-radius: 6px;
+    padding: clamp(1.6rem, 2.6vw, 2.2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+  }
+  .compare-col.them { background: var(--rust-wash); border: 1px solid color-mix(in srgb, var(--rust) 30%, var(--line)); }
+  .compare-col.us { background: var(--purple-wash); border: 1px solid color-mix(in srgb, var(--purple) 25%, var(--line)); }
+  .compare-tag {
+    font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.3em 0.75em; border-radius: 100px; width: fit-content;
+  }
+  .them .compare-tag { background: var(--rust); color: #fff; }
+  .us .compare-tag { background: var(--purple); color: #fff; }
+  .compare-col h3 { font-size: 1.35rem; }
+  .compare-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.8rem; }
+  .compare-list li { font-size: 0.94rem; color: var(--ink-soft); padding-left: 1.3rem; position: relative; line-height: 1.5; }
+  .them .compare-list li::before { content: '−'; position: absolute; left: 0; color: var(--rust); font-weight: 700; }
+  .us .compare-list li::before { content: '+'; position: absolute; left: 0; color: var(--purple); font-weight: 700; }
+
+  /* ---------- Tese / por que preço não é a guerra certa ---------- */
+  .thesis-card {
+    background: var(--purple-deep);
+    color: #fff;
+    padding: clamp(2.2rem, 4.5vw, 3.4rem);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+  }
+  .thesis-card::after {
+    content: ''; position: absolute; width: 280px; height: 280px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12); top: -90px; right: -90px;
+  }
+  .thesis-card .eyebrow { color: #D8B8E8; }
+  .thesis-card .eyebrow::before { background: #D8B8E8; }
+  .thesis-card h3 { color: #fff; font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin: 0.9rem 0 1.1rem; max-width: 20ch; }
+  .thesis-card p { color: #E4D3EE; line-height: 1.65; margin: 0; max-width: 52ch; font-size: 1.02rem; }
+
+  .stat-row { display: flex; gap: clamp(1.5rem, 4vw, 3.5rem); margin-top: 2.4rem; flex-wrap: wrap; }
+  .stat-row div { display: flex; flex-direction: column; gap: 0.3rem; }
+  .stat-row b { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 3.4vw, 2.6rem); font-weight: 500; color: var(--ink); }
+  .stat-row span { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* ---------- Diagnóstico ---------- */
+  .diag-wrap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+  @media (max-width: 900px) { .diag-wrap { grid-template-columns: 1fr; } }
+
+  .ig-card { background: #0F0B13; border-radius: 10px; padding: 1.4rem 1.5rem; color: #fff; position: relative; }
+  .ig-card .ig-handle { font-weight: 700; font-size: 1rem; }
+  .ig-card .ig-sub { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 0.2rem; }
+  .ig-stats { display: flex; gap: 1.6rem; margin: 1rem 0; font-size: 0.85rem; }
+  .ig-stats b { display: block; font-size: 1.05rem; color: #fff; }
+  .ig-stats span { color: rgba(255,255,255,0.55); font-size: 0.78rem; }
+  .ig-bio { font-size: 0.82rem; line-height: 1.6; color: rgba(255,255,255,0.75); border-top: 1px solid rgba(255,255,255,0.12); padding-top: 0.9rem; margin-top: 0.2rem; }
+
+  .diag-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .diag-list li { display: grid; grid-template-columns: 1.6rem 1fr; gap: 1rem; padding: 1.05rem 0; border-top: 1px solid var(--line); }
+  .diag-list li:last-child { border-bottom: 1px solid var(--line); }
+  .diag-list .flag { font-family: 'Space Mono', monospace; color: var(--gold); font-size: 0.85rem; padding-top: 0.15rem; }
+  .diag-list h4 { margin: 0 0 0.25rem; font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.02rem; }
+  .diag-list p { margin: 0; color: var(--ink-soft); font-size: 0.88rem; line-height: 1.5; }
+
+  /* ---------- Pilares ---------- */
+  .pillar {
+    padding: clamp(1.6rem, 2.4vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--card-bg);
+    display: flex; flex-direction: column; gap: 0.9rem; height: 100%;
+  }
+  .pillar .tag { font-family: 'Space Mono', monospace; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--purple); }
+  .pillar h3 { font-size: 1.15rem; font-weight: 500; }
+  .pillar p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.55; }
+  .pillar .beats { margin-top: auto; padding-top: 0.8rem; border-top: 1px dashed var(--line); font-size: 0.8rem; color: var(--rust); font-style: italic; }
+
+  /* ---------- Ideias ---------- */
+  .content-tabs-label { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+  .idea-row { display: grid; grid-template-columns: 2.2rem 1fr; gap: 1.1rem; padding: 1.05rem 0; border-top: 1px solid var(--line); }
+  .idea-row:last-child { border-bottom: 1px solid var(--line); }
+  .idea-row .n { font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--purple); }
+  .idea-row h4 { margin: 0 0 0.25rem; font-family: 'Fraunces', serif; font-weight: 500; font-size: 1.02rem; }
+  .idea-row p { margin: 0; color: var(--ink-soft); font-size: 0.88rem; line-height: 1.5; }
+  .format-pill {
+    display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.05em;
+    text-transform: uppercase; color: var(--purple); background: var(--purple-wash);
+    padding: 0.15em 0.6em; border-radius: 100px; margin-left: 0.5em; vertical-align: middle;
+  }
+
+  /* ---------- Rotina ---------- */
+  .care-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  @media (max-width: 900px) { .care-timeline { grid-template-columns: repeat(2, 1fr); } }
+  .care-block { border-top: 2px solid var(--purple); padding-top: 1.1rem; }
+  .care-block .freq { font-family: 'Space Mono', monospace; font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+  .care-block h3 { font-size: 1.02rem; font-weight: 600; margin: 0.4rem 0 0.5rem; }
+  .care-block p { margin: 0; color: var(--ink-soft); font-size: 0.86rem; line-height: 1.5; }
+
+  /* ---------- Métricas ---------- */
+  .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 0.5rem; }
+  @media (max-width: 900px) { .metric-grid { grid-template-columns: repeat(2, 1fr); } }
+  .metric-cell { background: var(--card-bg); padding: 1.6rem 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .metric-cell .big { font-family: 'Fraunces', serif; font-size: 1.5rem; color: var(--purple); }
+  .metric-cell .lbl { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-soft); }
+  .metric-cell p { margin: 0; font-size: 0.84rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* ---------- Escopo ---------- */
+  .scope-row { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .scope-item { display: grid; grid-template-columns: 1.2fr 2fr; gap: 2rem; padding: clamp(1.4rem, 2.2vw, 2rem); align-items: center; }
+  .scope-item + .scope-item { border-top: 1px solid var(--line); }
+  .scope-item.included { background: var(--purple-wash); }
+  .scope-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35em 0.8em; border-radius: 100px; width: fit-content; }
+  .scope-tag.yes { background: var(--purple); color: #fff; }
+  .scope-item h3 { font-size: 1.08rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .scope-item p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
+  @media (max-width: 720px) { .scope-item { grid-template-columns: 1fr; gap: 0.6rem; } }
+
+  /* ---------- Closing ---------- */
+  .closing { background: var(--purple-deep); color: #fff; align-items: flex-start; justify-content: center; }
+  .closing::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 15% 85%, rgba(255,255,255,0.05) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .closing .eyebrow { color: #D8B8E8; }
+  .closing .eyebrow::before { background: #D8B8E8; }
+  .closing h2 { color: #fff; font-size: clamp(2.2rem, 5.6vw, 3.8rem); max-width: 18ch; margin-top: 1.2rem; }
+  .closing h2 em { font-style: italic; color: #D8B8E8; }
+  .closing p { color: #E4D3EE; max-width: 48ch; margin-top: 1.4rem; font-size: 1.05rem; line-height: 1.6; }
+
+  footer {
+    padding: 2rem clamp(1.5rem, 8vw, 8rem) 2.4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.55); border-top: 1px solid rgba(255,255,255,0.12);
+    flex-wrap: wrap; gap: 0.6rem;
+  }
+  footer .mark { color: #D8B8E8; font-weight: 700; }
+
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" aria-label="Navegação entre seções">
+  <a href="#s1" title="Capa"></a>
+  <a href="#s2" title="A ameaça"></a>
+  <a href="#s3" title="A tese"></a>
+  <a href="#s4" title="Diagnóstico"></a>
+  <a href="#s5" title="Pilares"></a>
+  <a href="#s6" title="Posts"></a>
+  <a href="#s7" title="Reels"></a>
+  <a href="#s8" title="Rotina"></a>
+  <a href="#s9" title="Métricas"></a>
+  <a href="#s10" title="Escopo"></a>
+  <a href="#s11" title="Encerramento"></a>
+</nav>
+
+<section class="hero" id="s1">
+  <div class="hero-top">
+    <span>Onevision Consultoria</span>
+    <span>Planejamento de Mídia</span>
+  </div>
+  <div class="hero-mid">
+    <div class="eyebrow">Espaço das Divas · Ago 2026</div>
+    <h1 class="hero-title">Preço baixo <span class="accent-rust">eles vão ter.</span><br>Motivo pra voltar, <span class="accent">só a gente dá.</span></h1>
+    <p class="hero-sub">Um concorrente com e-commerce e preço mais agressivo vai abrir na porta ao lado. Este é o plano de conteúdo para vencer essa disputa sem entrar nela — pela relação, não pelo desconto.</p>
+  </div>
+  <div class="hero-bottom">
+    <span>Espaço das Divas — Maquiagem, Acessórios &amp; Vestuário</span>
+    <span>Conduzido por <strong>Onevision</strong></span>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="slide-index">01 <span>/</span> 11 — A Ameaça Real</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">O que muda agora</div>
+    <h2 class="section-title">Um vizinho novo, com <span class="accent-rust">outra estrutura de jogo.</span></h2>
+    <p class="lede">Ele não é só mais uma loja concorrente — tem site com carrinho de compra, entrega, e compra em volume que derruba o preço de custo. Competir de igual pra igual nesse terreno é perder dinheiro em uma guerra que ele já está preparado pra vencer.</p>
+  </div>
+  <div class="threat-wrap">
+    <div class="compare-col them">
+      <span class="compare-tag">O concorrente</span>
+      <h3>Vende commodity, com escala</h3>
+      <ul class="compare-list">
+        <li>E-commerce aberto 24h, sem depender de horário de loja física.</li>
+        <li>Poder de compra maior — preço de tabela mais baixo que o nosso.</li>
+        <li>Atendimento padronizado, o mesmo discurso pra qualquer cliente.</li>
+        <li>Vitrine de catálogo: peça, preço, próxima peça.</li>
+      </ul>
+    </div>
+    <div class="compare-col us">
+      <span class="compare-tag">Espaço das Divas</span>
+      <h3>Vende relação, com raiz local</h3>
+      <ul class="compare-list">
+        <li>11,2 mil seguidores construídos sem anúncio — confiança que já existe.</li>
+        <li>Quem atende conhece o nome, o gosto e o tamanho da cliente.</li>
+        <li>Curadoria: alguém já escolheu o que vale a pena pra você.</li>
+        <li>Presença de bairro — a loja que a cliente já visita, já indica.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="slide-index">02 <span>/</span> 11 — A Tese</div>
+  <div class="brandmark">Onevision</div>
+  <div class="grid-2" style="align-items:center;">
+    <div class="thesis-card">
+      <div class="eyebrow">Nossa aposta</div>
+      <h3>Quem compra só por preço, a gente não segura mesmo. Quem compra por confiança, a gente não perde.</h3>
+      <p>O objetivo não é baixar preço pra competir — é dar tantos motivos pra continuar comprando aqui que o preço deixa de ser a primeira pergunta. Isso se constrói com conteúdo, todo santo dia, antes da loja ao lado abrir a porta.</p>
+    </div>
+    <div>
+      <div class="eyebrow">Onde a Divas já vence</div>
+      <div class="stat-row">
+        <div><b>11,2 mil</b><span>Seguidores orgânicos</span></div>
+        <div><b>324</b><span>Posts publicados</span></div>
+        <div><b>0</b><span>Reais em anúncio até hoje</span></div>
+      </div>
+      <p class="lede" style="margin-top:2rem;">Esse alcance já prova que existe demanda e confiança de sobra. Agora o trabalho é transformar esse público em hábito de compra — antes que ele tenha uma segunda opção na mesma rua.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="slide-index">03 <span>/</span> 11 — Diagnóstico do Perfil</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">Ponto de partida</div>
+    <h2 class="section-title">O feed hoje já <span class="accent">vende por preço.</span> Precisa vender por desejo.</h2>
+    <p class="lede">A bio destaca "Makes por R$12" — funciona pra atrair, mas é exatamente o terreno onde o concorrente novo vai brigar com vantagem. Ajustar esse discurso agora tira a Divas dessa disputa direta.</p>
+  </div>
+  <div class="diag-wrap">
+    <div class="ig-card">
+      <div class="ig-handle">espacodasdivassj</div>
+      <div class="ig-sub">Espaço das Divas | Maquiagem e Acessórios</div>
+      <div class="ig-stats">
+        <div><b>324</b><span>posts</span></div>
+        <div><b>11,2 mil</b><span>seguidores</span></div>
+        <div><b>3.995</b><span>seguindo</span></div>
+      </div>
+      <div class="ig-bio">"Beleza, cosméticos e cuidados pessoais 💄 Makes incríveis por apenas R$12 👗 vestuário &amp; acessórios que amamos 📍 Forquilhinhas — São José 🕐 Seg-Sex: 10h... mais"</div>
+    </div>
+    <ul class="diag-list">
+      <li><span class="flag">01</span><div><h4>Bio ancorada em preço, não em identidade</h4><p>O primeiro gatilho que a cliente lê é R$12. Isso convida à comparação de preço — o jogo que o concorrente com e-commerce está montado pra ganhar.</p></div></li>
+      <li><span class="flag">02</span><div><h4>Feed sem assinatura visual própria</h4><p>Formatos variados competem entre si em vez de reforçar uma identidade. Sem isso, é fácil confundir Divas com qualquer outra loja de bairro.</p></div></li>
+      <li><span class="flag">03</span><div><h4>Pouca prova de relação com a cliente</h4><p>Quase não aparece bastidor, depoimento ou rosto de quem atende — justamente o que um e-commerce nunca vai conseguir copiar.</p></div></li>
+      <li><span class="flag">04</span><div><h4>Zero uso de Reels como motor de alcance</h4><p>Hoje o crescimento depende só do feed. Reels é o formato que o Instagram mais empurra pra fora da base de seguidores — essencial pra continuar crescendo com a loja nova por perto.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="slide-index">04 <span>/</span> 11 — Pilares de Conteúdo</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">O que um e-commerce não consegue postar</div>
+    <h2 class="section-title">Três pilares, <span class="accent">um só objetivo:</span> ser insubstituível.</h2>
+    <p class="lede">Cada pilar ataca diretamente uma vantagem que a concorrência pode ter — mostrando o que só uma loja física, com gente de verdade, entrega.</p>
+  </div>
+  <div class="grid-3">
+    <div class="pillar">
+      <span class="tag">Pilar 01</span>
+      <h3>Curadoria, não catálogo</h3>
+      <p>Looks montados, produtos testados e recomendados por quem entende — não uma lista de itens pra rolar a página.</p>
+      <span class="beats">Vence o "site com tudo" pela escolha certa, não pela variedade.</span>
+    </div>
+    <div class="pillar">
+      <span class="tag">Pilar 02</span>
+      <h3>Rosto e bastidor real</h3>
+      <p>Quem atende aparece, fala, recomenda. Cliente satisfeita, chegada de peça nova, rotina da loja — humano de verdade, todo dia.</p>
+      <span class="beats">Vence o atendimento padronizado pela relação que já existe.</span>
+    </div>
+    <div class="pillar">
+      <span class="tag">Pilar 03</span>
+      <h3>Comunidade de bairro</h3>
+      <p>Enquetes, indicação de cliente pra cliente, presença no dia a dia de São José — a loja como parte da rotina, não só destino de compra.</p>
+      <span class="beats">Vence o e-commerce pela proximidade que ele nunca vai ter.</span>
+    </div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="slide-index">05 <span>/</span> 11 — Ideias de Posts</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="content-tabs-label">Feed &amp; Carrossel</div>
+    <h2 class="section-title">Conteúdo que um <span class="accent-rust">catálogo online</span> não sabe fazer.</h2>
+    <p class="lede">Formatos pensados pra reforçar o que a Divas tem e o concorrente não: gente, contexto e confiança construída.</p>
+  </div>
+  <div>
+    <div class="idea-row">
+      <span class="n">01</span>
+      <div><h4>"Provei antes de vender" <span class="format-pill">Carrossel</span></h4><p>Quem atende testando o produto e dando o veredito real — algo que nenhuma ficha técnica de e-commerce entrega.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">02</span>
+      <div><h4>"Monte o look comigo" <span class="format-pill">Carrossel</span></h4><p>Uma peça combinada de 3 formas diferentes. Gera salvamento — a cliente guarda pra copiar, e volta pra ver mais.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">03</span>
+      <div><h4>Depoimento real de cliente satisfeita <span class="format-pill">Post + Story</span></h4><p>Print de conversa (com autorização) ou foto da cliente com a peça. Prova social que nenhum site de e-commerce novo consegue ter no primeiro mês.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">04</span>
+      <div><h4>"Separei pra você" — indicação por perfil de cliente <span class="format-pill">Post interativo</span></h4><p>Enquete nos Stories pra descobrir o estilo da cliente e indicar peça — serviço que um catálogo genérico não oferece.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">05</span>
+      <div><h4>"Chegou hoje" — chegada de coleção <span class="format-pill">Post único</span></h4><p>Peça nova com senso de exclusividade local ("peça única", "só aqui na loja") — reforça que na Divas tem o que o vizinho não tem.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="slide-index">06 <span>/</span> 11 — Ideias de Reels</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="content-tabs-label">Vídeo curto</div>
+    <h2 class="section-title">Alcance que <span class="accent">nenhum anúncio pago</span> vai bater de graça.</h2>
+    <p class="lede">Reels é o motor de crescimento mais barato que a Divas tem — e o formato onde a autenticidade da loja física pesa mais que qualquer orçamento de e-commerce.</p>
+  </div>
+  <div>
+    <div class="idea-row">
+      <span class="n">01</span>
+      <div><h4>Try-on de 3 looks em um vídeo <span class="format-pill">Reels</span></h4><p>Transição rápida entre roupas no ritmo da música. Um dos formatos de maior retenção em contas de moda.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">02</span>
+      <div><h4>"O que veio na caixa" — unboxing de fornecedor <span class="format-pill">Reels</span></h4><p>Bastidor genuíno de mercadoria nova, algo que só quem tem loja física pode mostrar em tempo real.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">03</span>
+      <div><h4>"Por que vale mais aqui" — comparação honesta <span class="format-pill">Reels de opinião</span></h4><p>Sem citar concorrente: mostrar o que está incluso na compra na Divas — troca fácil, ajuda a escolher, relação — que preço baixo sozinho não compra.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">04</span>
+      <div><h4>Tutorial rápido de make com produto da loja <span class="format-pill">Reels</span></h4><p>Conteúdo de valor educacional que empurra tráfego pro produto sem parecer publicidade.</p></div>
+    </div>
+    <div class="idea-row">
+      <span class="n">05</span>
+      <div><h4>Dia a dia real da loja (POV vendedora) <span class="format-pill">Reels</span></h4><p>Rotina, organização de araras, atendimento de verdade — humaniza a marca de um jeito que um site nunca vai conseguir.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="slide-index">07 <span>/</span> 11 — Rotina da Página</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">Como vamos cuidar da página</div>
+    <h2 class="section-title">Presença <span class="accent">constante</span>, principalmente nos próximos 90 dias.</h2>
+    <p class="lede">A janela até a loja concorrente abrir é a mais importante pra fortalecer o vínculo com quem já segue — consistência é o que garante isso.</p>
+  </div>
+  <div class="care-timeline">
+    <div class="care-block">
+      <span class="freq">Mensal</span>
+      <h3>Planejamento de conteúdo</h3>
+      <p>Temas, datas comerciais e lançamentos alinhados ao estoque — priorizando o que reforça diferencial, não preço.</p>
+    </div>
+    <div class="care-block">
+      <span class="freq">Semanal</span>
+      <h3>Produção &amp; publicação</h3>
+      <p>Posts e reels com legendas na voz da marca, publicados nos horários de maior engajamento.</p>
+    </div>
+    <div class="care-block">
+      <span class="freq">Diária</span>
+      <h3>Interação com a comunidade</h3>
+      <p>Comentários e mensagens respondidos rápido — é essa resposta humana que o concorrente não vai igualar.</p>
+    </div>
+    <div class="care-block">
+      <span class="freq">Contínua</span>
+      <h3>Leitura de concorrência</h3>
+      <p>Acompanhar o que a loja nova faz e comunica, pra ajustar o discurso da Divas sem nunca entrar na guerra de preço.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="slide-index">08 <span>/</span> 11 — Métricas de Sucesso</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">O que vamos medir</div>
+    <h2 class="section-title">Não é alcance por alcance. <span class="accent">É retorno pra loja.</span></h2>
+    <p class="lede">Com um concorrente novo por perto, o número que importa é conversão e retenção — não só quantas pessoas viram o post.</p>
+  </div>
+  <div class="metric-grid">
+    <div class="metric-cell">
+      <span class="big">↑</span>
+      <span class="lbl">Salvamentos &amp; compartilhamentos</span>
+      <p>Sinal de que o conteúdo virou referência de estilo, não só entretenimento.</p>
+    </div>
+    <div class="metric-cell">
+      <span class="big">↑</span>
+      <span class="lbl">Mensagens no direct</span>
+      <p>Intenção de compra real gerada pelo conteúdo — o indicador mais próximo de venda.</p>
+    </div>
+    <div class="metric-cell">
+      <span class="big">↑</span>
+      <span class="lbl">Taxa de recompra</span>
+      <p>Cliente que já comprou e volta — prova de que a relação está segurando contra o preço da concorrência.</p>
+    </div>
+    <div class="metric-cell">
+      <span class="big">↑</span>
+      <span class="lbl">Crescimento orgânico mensal</span>
+      <p>Novos seguidores sem depender de anúncio — sustentando a base antes da loja nova abrir.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="slide-index">09 <span>/</span> 11 — Escopo</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">O que está incluso agora</div>
+    <h2 class="section-title">Foco total em <span class="accent">social media orgânico.</span></h2>
+    <p class="lede">Tráfego pago e site próprio ficam no radar como próxima fase — quando a base de conteúdo já estiver sólida o bastante pra sustentar investimento.</p>
+  </div>
+  <div class="scope-row">
+    <div class="scope-item included">
+      <span class="scope-tag yes">Fase atual</span>
+      <div><h3>Gestão de Instagram — posts, reels e stories</h3><p>Planejamento, produção, publicação e resposta à comunidade, com foco em diferenciação frente à concorrência.</p></div>
+    </div>
+    <div class="scope-item included">
+      <span class="scope-tag yes">Fase atual</span>
+      <div><h3>Reposicionamento de bio e destaques</h3><p>Ajuste de discurso para tirar o foco de preço e colocar em identidade e curadoria.</p></div>
+    </div>
+    <div class="scope-item">
+      <span class="scope-tag" style="background:transparent;color:var(--ink-soft);border:1px solid var(--line);">Próxima fase</span>
+      <div><h3>Site institucional / catálogo</h3><p>Endereço fixo pra loja fora do Instagram, quando fizer sentido escalar.</p></div>
+    </div>
+    <div class="scope-item">
+      <span class="scope-tag" style="background:transparent;color:var(--ink-soft);border:1px solid var(--line);">Próxima fase</span>
+      <div><h3>Tráfego pago (Meta Ads)</h3><p>Impulsionamento do que já converte organicamente — não antes disso.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="s11">
+  <div class="slide-index" style="color:rgba(255,255,255,0.5);">10 <span style="color:#D8B8E8;">/</span> 11 — Vamos começar</div>
+  <div class="eyebrow">Antes que a loja ao lado abra a porta</div>
+  <h2>O preço deles chega em algumas semanas. <em>A confiança da Divas já está construída.</em></h2>
+  <p>A partir da aprovação, iniciamos o reposicionamento da bio e o primeiro mês de conteúdo — com o cronograma pronto pra rodar antes da concorrência entrar em cena.</p>
+</section>
+
+<footer>
+  <span>Created by <span class="mark">Onevision</span></span>
+  <span>© 2026 Todos os direitos reservados — Espaço das Divas</span>
+</footer>
+
+</body>
+</html>
