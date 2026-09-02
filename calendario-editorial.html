@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprenda a Olhar, Aprenda a Comprar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,440;0,9..144,600;1,9..144,440&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #FAF8F6;
+    --bg-alt: #F3EEE9;
+    --ink: #241C2C;
+    --ink-soft: #5B5163;
+    --purple: #6B2D8C;
+    --purple-deep: #3D1854;
+    --purple-wash: #F1E6F6;
+    --purple-wash-2: #E7D5F0;
+    --gold: #AD8548;
+    --gold-wash: #F6EFE2;
+    --line: #E3DAD0;
+    --card-bg: #FFFFFF;
+    --shadow: 0 20px 60px -30px rgba(61, 24, 84, 0.25);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17111C;
+      --bg-alt: #1F1826;
+      --ink: #F3ECF6;
+      --ink-soft: #B7A9C2;
+      --purple: #B27FCB;
+      --purple-deep: #E3C9EF;
+      --purple-wash: #2B1E36;
+      --purple-wash-2: #38253F;
+      --gold: #D2AC74;
+      --gold-wash: #2E2416;
+      --line: #382C41;
+      --card-bg: #1F1826;
+      --shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17111C;
+    --bg-alt: #1F1826;
+    --ink: #F3ECF6;
+    --ink-soft: #B7A9C2;
+    --purple: #B27FCB;
+    --purple-deep: #E3C9EF;
+    --purple-wash: #2B1E36;
+    --purple-wash-2: #38253F;
+    --gold: #D2AC74;
+    --gold-wash: #2E2416;
+    --line: #382C41;
+    --card-bg: #1F1826;
+    --shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    scroll-snap-type: y proximity;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+
+  ::selection { background: var(--purple); color: #fff; }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 440;
+    text-wrap: balance;
+    margin: 0;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .accent { color: var(--purple); font-style: italic; font-weight: 440; }
+  .accent-gold { color: var(--gold); font-style: italic; font-weight: 440; }
+
+  b, strong { color: var(--purple); font-weight: 700; }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); display: inline-block; }
+
+  section {
+    min-height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 8vw, 8rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .slide-index {
+    position: absolute;
+    top: clamp(1.5rem, 4vw, 3rem);
+    left: clamp(1.5rem, 8vw, 8rem);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+  }
+  .slide-index span { color: var(--purple); font-weight: 700; }
+
+  .brandmark {
+    position: absolute;
+    top: clamp(1.5rem, 4vw, 3rem);
+    right: clamp(1.5rem, 8vw, 8rem);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .nav-dots {
+    position: fixed;
+    right: clamp(1rem, 3vw, 2.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 50;
+  }
+  .nav-dots a {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--line);
+    border: 1px solid transparent;
+    transition: background 0.25s, transform 0.25s;
+    display: block;
+  }
+  .nav-dots a:hover, .nav-dots a:focus-visible { background: var(--purple); transform: scale(1.3); outline: none; }
+  @media (max-width: 720px) { .nav-dots { display: none; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    background:
+      radial-gradient(circle at 85% 10%, var(--purple-wash) 0%, transparent 45%),
+      radial-gradient(circle at 8% 92%, var(--gold-wash) 0%, transparent 40%),
+      var(--bg);
+    justify-content: space-between;
+  }
+  .hero-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-soft); padding-top: 2rem;
+  }
+  .hero-mid { margin: auto 0; }
+  .hero-mid .eyebrow { margin-bottom: 1.6rem; }
+  .hero-title { font-size: clamp(2.6rem, 7.4vw, 5.6rem); line-height: 1.02; max-width: 18ch; }
+  .hero-sub { margin-top: 1.8rem; font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink-soft); max-width: 46ch; font-weight: 500; }
+  .hero-bottom {
+    display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 1.5rem;
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--ink-soft); letter-spacing: 0.05em;
+  }
+  .hero-bottom strong { color: var(--purple); }
+
+  /* ---------- Generic ---------- */
+  .section-head { max-width: 62ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .section-title { font-size: clamp(2rem, 4.2vw, 3.2rem); margin-top: 0.9rem; }
+  .lede { font-size: clamp(1.02rem, 1.4vw, 1.2rem); color: var(--ink-soft); max-width: 58ch; line-height: 1.6; margin-top: 1.1rem; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 3rem); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 2.5vw, 2rem); }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 4px; padding: clamp(1.5rem, 2.5vw, 2.2rem); }
+
+  /* ---------- Diagnóstico: IA vs Real ---------- */
+  .compare-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 4vw, 3.5rem); align-items: stretch; }
+  @media (max-width: 900px) { .compare-wrap { grid-template-columns: 1fr; } }
+  .compare-col { border-radius: 6px; padding: clamp(1.6rem, 2.6vw, 2.2rem); display: flex; flex-direction: column; gap: 1.2rem; }
+  .compare-col.bad { background: var(--bg-alt); border: 1px solid var(--line); }
+  .compare-col.good { background: var(--purple-wash); border: 1px solid color-mix(in srgb, var(--purple) 25%, var(--line)); }
+  .compare-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3em 0.75em; border-radius: 100px; width: fit-content; }
+  .bad .compare-tag { background: var(--ink-soft); color: #fff; }
+  .good .compare-tag { background: var(--purple); color: #fff; }
+  .compare-col h3 { font-size: 1.3rem; }
+  .compare-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .compare-list li { font-size: 0.92rem; color: var(--ink-soft); padding-left: 1.3rem; position: relative; line-height: 1.5; }
+  .bad .compare-list li::before { content: '−'; position: absolute; left: 0; color: var(--ink-soft); font-weight: 700; }
+  .good .compare-list li::before { content: '+'; position: absolute; left: 0; color: var(--purple); font-weight: 700; }
+
+  /* ---------- Referências observadas ---------- */
+  .ref-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 0.5rem; }
+  @media (max-width: 900px) { .ref-grid { grid-template-columns: repeat(2, 1fr); } }
+  .ref-cell { background: var(--card-bg); padding: 1.5rem 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .ref-cell .handle { font-family: 'Space Mono', monospace; font-size: 0.74rem; color: var(--purple); }
+  .ref-cell .fmt { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 500; }
+  .ref-cell p { margin: 0; font-size: 0.82rem; color: var(--ink-soft); line-height: 1.45; }
+
+  /* ---------- Pilares ---------- */
+  .pillar {
+    padding: clamp(1.6rem, 2.4vw, 2rem); border: 1px solid var(--line); border-radius: 4px; background: var(--card-bg);
+    display: flex; flex-direction: column; gap: 0.9rem; height: 100%;
+  }
+  .pillar .tag { font-family: 'Space Mono', monospace; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--purple); }
+  .pillar h3 { font-size: 1.15rem; font-weight: 500; }
+  .pillar p { margin: 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.55; }
+
+  /* ---------- Calendário ---------- */
+  .cal-week { margin-bottom: 2.2rem; }
+  .cal-week:last-child { margin-bottom: 0; }
+  .cal-week-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1rem; }
+  .cal-week-head .wk { font-family: 'Space Mono', monospace; color: var(--purple); font-size: 0.8rem; }
+  .cal-week-head h4 { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 500; margin: 0; }
+  .cal-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  @media (max-width: 900px) { .cal-row { grid-template-columns: repeat(4, 1fr); } }
+  .cal-day {
+    background: var(--card-bg); border: 1px solid var(--line); border-radius: 4px; padding: 0.7rem 0.6rem;
+    display: flex; flex-direction: column; gap: 0.35rem; min-height: 92px;
+  }
+  .cal-day .d { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+  .cal-day .t { font-size: 0.78rem; font-weight: 600; color: var(--ink); line-height: 1.3; }
+  .cal-day .f { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--purple); text-transform: uppercase; letter-spacing: 0.04em; }
+  .cal-day.off { background: transparent; border-style: dashed; opacity: 0.5; }
+
+  /* ---------- Roteiros ---------- */
+  .script-card {
+    border: 1px solid var(--line); border-radius: 6px; background: var(--card-bg); overflow: hidden; margin-bottom: 1.4rem;
+  }
+  .script-card:last-child { margin-bottom: 0; }
+  .script-head { background: var(--purple-deep); color: #fff; padding: 1.1rem 1.6rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .script-head .n { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: #D8B8E8; }
+  .script-head h3 { color: #fff; font-size: 1.15rem; }
+  .script-head .dur { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #D8B8E8; }
+  .script-body { padding: 1.3rem 1.6rem; }
+  .script-goal { font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--line); }
+  .script-goal b { color: var(--purple); }
+  .beat-row { display: grid; grid-template-columns: 3.6rem 1fr; gap: 1rem; padding: 0.7rem 0; border-top: 1px solid var(--line); }
+  .beat-row:first-of-type { border-top: none; }
+  .beat-row .time { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--purple); padding-top: 0.15rem; }
+  .beat-row .what b { display: block; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.15rem; }
+  .beat-row .what span { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.45; }
+
+  /* ---------- Diretrizes ---------- */
+  .rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 3vw, 3rem); }
+  @media (max-width: 900px) { .rule-grid { grid-template-columns: 1fr; } }
+  .rule-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.9rem; }
+  .rule-list li { font-size: 0.94rem; color: var(--ink-soft); padding-left: 1.4rem; position: relative; line-height: 1.5; }
+  .rule-avoid li::before { content: '✕'; position: absolute; left: 0; color: var(--ink-soft); font-size: 0.78rem; top: 0.15rem; }
+  .rule-do li::before { content: '✓'; position: absolute; left: 0; color: var(--purple); font-weight: 700; }
+
+  /* ---------- Closing ---------- */
+  .closing { background: var(--purple-deep); color: #fff; align-items: flex-start; justify-content: center; }
+  .closing::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 15% 85%, rgba(255,255,255,0.05) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .closing .eyebrow { color: #D8B8E8; }
+  .closing .eyebrow::before { background: #D8B8E8; }
+  .closing h2 { color: #fff; font-size: clamp(2.2rem, 5.6vw, 3.8rem); max-width: 18ch; margin-top: 1.2rem; }
+  .closing h2 em { font-style: italic; color: #D8B8E8; }
+  .closing p { color: #E4D3EE; max-width: 48ch; margin-top: 1.4rem; font-size: 1.05rem; line-height: 1.6; }
+
+  footer {
+    padding: 2rem clamp(1.5rem, 8vw, 8rem) 2.4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.55); border-top: 1px solid rgba(255,255,255,0.12);
+    flex-wrap: wrap; gap: 0.6rem;
+  }
+  footer .mark { color: #D8B8E8; font-weight: 700; }
+
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav-dots" aria-label="Navegação entre seções">
+  <a href="#s1" title="Capa"></a>
+  <a href="#s2" title="O problema"></a>
+  <a href="#s3" title="Referências"></a>
+  <a href="#s4" title="Pilares"></a>
+  <a href="#s5" title="Calendário"></a>
+  <a href="#s6" title="Reels quebra-gelo"></a>
+  <a href="#s7" title="Diretrizes"></a>
+  <a href="#s8" title="Encerramento"></a>
+</nav>
+
+<section class="hero" id="s1">
+  <div class="hero-top">
+    <span>Onevision Consultoria</span>
+    <span>Calendário Editorial</span>
+  </div>
+  <div class="hero-mid">
+    <div class="eyebrow">Espaço das Divas · Setembro 2026</div>
+    <h1 class="hero-title">Chega de cara de <span class="accent-gold">IA.</span> Hora de mostrar <span class="accent">gente de verdade.</span></h1>
+    <p class="hero-sub">Um calendário de 4 semanas e roteiros de gravação pensados pra ensinar quem segue a olhar a peça — e comprar. Espontâneo, sem filtro pesado, sem parecer anúncio.</p>
+  </div>
+  <div class="hero-bottom">
+    <span>Espaço das Divas — Maquiagem, Acessórios &amp; Vestuário</span>
+    <span>Conduzido por <strong>Onevision</strong></span>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="slide-index">01 <span>/</span> 08 — O Problema</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">Por que mudar agora</div>
+    <h2 class="section-title">Feed bonito demais <span class="accent">não vende confiança.</span></h2>
+    <p class="lede">Texto muito polido, imagem muito perfeita e voz muito neutra fazem o conteúdo parecer gerado — e a cliente desconfia. O que faz alguém parar de rolar o feed e prestar atenção é o oposto: mão tremendo de verdade, risada cortada, luz de loja mesmo.</p>
+  </div>
+  <div class="compare-wrap">
+    <div class="compare-col bad">
+      <span class="compare-tag">Evitar</span>
+      <h3>O que hoje soa "de IA"</h3>
+      <ul class="compare-list">
+        <li>Legendas muito formatadas, com emoji em excesso e frase de efeito genérica.</li>
+        <li>Voz em off robótica ou texto lido sem entonação.</li>
+        <li>Imagem com filtro pesado que estoura a cor real da peça.</li>
+        <li>Corte perfeito demais, sem nenhum "erro" humano.</li>
+      </ul>
+    </div>
+    <div class="compare-col good">
+      <span class="compare-tag">Buscar</span>
+      <h3>O que parece gente de verdade</h3>
+      <ul class="compare-list">
+        <li>Fala direta, como se estivesse respondendo uma cliente no balcão.</li>
+        <li>Câmera na mão, levemente instável, sem tripé fixo o tempo todo.</li>
+        <li>Cor real da peça, luz natural da loja, sem preset pesado.</li>
+        <li>Deixar cortes "crus" — uma pausa, uma risada, um "olha só isso".</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="slide-index">02 <span>/</span> 08 — Referências do Nicho</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">O que o mercado de acessórios e moda já testou</div>
+    <h2 class="section-title">Formatos que <span class="accent">funcionam</span> em loja de semijoia, prata e moda íntima.</h2>
+    <p class="lede">Sem copiar roteiro de ninguém — usando os formatos que esse nicho já validou como ponto de partida, adaptados pra voz e produto da Espaço das Divas.</p>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-cell"><span class="handle">Estilo semijoia / bijuteria</span><span class="fmt">Close na peça em mão</span><p>Mão real segurando e girando a peça pertinho da câmera, mostrando brilho e detalhe — sem manequim, sem still de catálogo.</p></div>
+    <div class="ref-cell"><span class="handle">Estilo prata / acessórios</span><span class="fmt">Combinação rápida</span><p>Uma peça combinada com 2-3 looks diferentes em cortes curtos, no ritmo de uma música — mostra versatilidade em poucos segundos.</p></div>
+    <div class="ref-cell"><span class="handle">Estilo moda íntima / vestuário</span><span class="fmt">Prova em corpo real</span><p>Peça vestida por quem atende ou por cliente, com reação genuína — "olha como caiu" — em vez de manequim ou still de araras.</p></div>
+    <div class="ref-cell"><span class="handle">Estilo bastidor de loja</span><span class="fmt">Chegada de fornecedor</span><p>Caixa sendo aberta, produto novo sendo desembalado na hora, reação real de quem recebe — cria expectativa sem parecer produzido.</p></div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="slide-index">03 <span>/</span> 08 — Pilares do Calendário</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">O que vamos ensinar o público a fazer</div>
+    <h2 class="section-title">Olhar a peça. <span class="accent">Confiar na loja.</span> Comprar sem pensar duas vezes.</h2>
+    <p class="lede">Cada pilar corresponde a uma etapa da jornada — do primeiro segundo de atenção até a mensagem no direct.</p>
+  </div>
+  <div class="grid-3">
+    <div class="pillar">
+      <span class="tag">Pilar 01 · Atenção</span>
+      <h3>Quebra-gelo autêntico</h3>
+      <p>Conteúdo cru, feito na hora, sem roteiro decorado — pra provar que ali tem gente de verdade, não um feed automatizado.</p>
+    </div>
+    <div class="pillar">
+      <span class="tag">Pilar 02 · Confiança</span>
+      <h3>Ensinar a olhar</h3>
+      <p>Mostrar detalhe, caimento, acabamento — "repara nisso aqui" — ensinando a cliente a reconhecer qualidade antes de perguntar o preço.</p>
+    </div>
+    <div class="pillar">
+      <span class="tag">Pilar 03 · Conversão</span>
+      <h3>Convite direto pra comprar</h3>
+      <p>CTA claro no fim de cada peça de conteúdo forte: "chama no direct", "vem provar", "última unidade" — sem enrolação.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="slide-index">04 <span>/</span> 08 — Calendário Editorial</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">4 semanas, ritmo real de loja</div>
+    <h2 class="section-title">Um calendário pra <span class="accent">rodar toda semana,</span> sem depender de inspiração do dia.</h2>
+    <p class="lede">Ritmo de 5 publicações por semana (2 folgas), alternando Reels e Feed — sempre com pelo menos 1 quebra-gelo autêntico por semana.</p>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-head"><span class="wk">Semana 1</span><h4>Quebrar o padrão de "feed de IA"</h4></div>
+    <div class="cal-row">
+      <div class="cal-day"><span class="d">Seg</span><span class="t">Reels quebra-gelo #1 — "Segura isso"</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="d">Ter</span><span class="t">Story cru — vendedora chegando, abrindo a loja</span><span class="f">Story</span></div>
+      <div class="cal-day"><span class="d">Qua</span><span class="t">Feed — peça em mão, close no detalhe</span><span class="f">Feed</span></div>
+      <div class="cal-day"><span class="d">Qui</span><span class="t">Reels — combinação rápida (3 looks, 1 peça)</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="d">Sex</span><span class="t">Carrossel — "repara nisso": ensinando a olhar</span><span class="f">Feed</span></div>
+      <div class="cal-day off"><span class="d">Sáb</span><span class="t">Folga de produção</span></div>
+      <div class="cal-day off"><span class="d">Dom</span><span class="t">Repost de cliente / descanso</span></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-head"><span class="wk">Semana 2</span><h4>Prova social e bastidor real</h4></div>
+    <div class="cal-row">
+      <div class="cal-day"><span class="t">Reels quebra-gelo #2 — try-on cru</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="t">Story — enquete "qual combina mais"</span><span class="f">Story</span></div>
+      <div class="cal-day"><span class="t">Feed — cliente experimentando, reação real</span><span class="f">Feed</span></div>
+      <div class="cal-day"><span class="t">Reels — bastidor: chegada de fornecedor</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="t">Feed — depoimento de cliente (print/foto)</span><span class="f">Feed</span></div>
+      <div class="cal-day off"><span class="t">Folga de produção</span></div>
+      <div class="cal-day off"><span class="t">Repost de cliente / descanso</span></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-head"><span class="wk">Semana 3</span><h4>Ensinar a olhar e a comprar</h4></div>
+    <div class="cal-row">
+      <div class="cal-day"><span class="t">Reels quebra-gelo #3 — bastidor de atendimento</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="t">Story — "3 dicas pra reconhecer peça boa"</span><span class="f">Story</span></div>
+      <div class="cal-day"><span class="t">Feed — antes/depois de um look montado</span><span class="f">Feed</span></div>
+      <div class="cal-day"><span class="t">Reels — tutorial rápido (como usar/combinar)</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="t">Carrossel — "chegou hoje", peça única</span><span class="f">Feed</span></div>
+      <div class="cal-day off"><span class="t">Folga de produção</span></div>
+      <div class="cal-day off"><span class="t">Repost de cliente / descanso</span></div>
+    </div>
+  </div>
+
+  <div class="cal-week">
+    <div class="cal-week-head"><span class="wk">Semana 4</span><h4>Convite direto pra comprar</h4></div>
+    <div class="cal-row">
+      <div class="cal-day"><span class="t">Reels — POV vendedora, dia real na loja</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="t">Story — caixinha de perguntas sobre estilo</span><span class="f">Story</span></div>
+      <div class="cal-day"><span class="t">Feed — vitrine com estilo, look completo</span><span class="f">Feed</span></div>
+      <div class="cal-day"><span class="t">Reels — "por que essa peça vale a pena"</span><span class="f">Reels</span></div>
+      <div class="cal-day"><span class="t">Feed — CTA direto: "separei pra você, chama no direct"</span><span class="f">Feed</span></div>
+      <div class="cal-day off"><span class="t">Folga de produção</span></div>
+      <div class="cal-day off"><span class="t">Repost de cliente / descanso</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="slide-index">05 <span>/</span> 08 — 3 Reels Quebra-Gelo</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">Roteiros de gravação</div>
+    <h2 class="section-title">Três formas de mostrar que <span class="accent">ali tem gente,</span> não robô.</h2>
+    <p class="lede">Sem decoreba de fala. O roteiro é um guia de beats (momentos), não um texto pra ler — a espontaneidade é o objetivo.</p>
+  </div>
+
+  <div class="script-card">
+    <div class="script-head">
+      <span class="n">Quebra-gelo 01</span>
+      <h3>"Segura isso" — a peça na mão, sem filtro</h3>
+      <span class="dur">±15s · Reels vertical</span>
+    </div>
+    <div class="script-body">
+      <div class="script-goal"><b>Objetivo:</b> primeiro contato visual — provar que tem gente de verdade escolhendo as peças, com luz e voz reais da loja.</div>
+      <div class="beat-row"><span class="time">0-3s</span><div class="what"><b>Abertura crua</b><span>Câmera na mão, um pouco torta, focando numa peça em cima do balcão. Quem grava fala direto, sem introdução ensaiada: "Olha o que chegou agora."</span></div></div>
+      <div class="beat-row"><span class="time">3-9s</span><div class="what"><b>Close no detalhe</b><span>Pega a peça, gira devagar perto da câmera, aponta com o dedo um detalhe específico (brilho, textura, acabamento) e comenta em voz normal, como se estivesse mostrando pra uma amiga.</span></div></div>
+      <div class="beat-row"><span class="time">9-13s</span><div class="what"><b>Reação genuína</b><span>Uma frase espontânea tipo "eu não larguei essa hoje" ou uma risada real — não precisa ser roteirizado, deixar rodar e cortar o melhor pedaço.</span></div></div>
+      <div class="beat-row"><span class="time">13-15s</span><div class="what"><b>CTA falado</b><span>"Tá aqui na loja, vem ver" — sem legenda gigante na tela, só uma seta ou texto curto tipo "só na Divas".</span></div></div>
+    </div>
+  </div>
+
+  <div class="script-card">
+    <div class="script-head">
+      <span class="n">Quebra-gelo 02</span>
+      <h3>Try-on cru — 3 peças, sem edição pesada</h3>
+      <span class="dur">±18s · Reels vertical</span>
+    </div>
+    <div class="script-body">
+      <div class="script-goal"><b>Objetivo:</b> mostrar variedade rápido, no ritmo de vídeo que já engaja no nicho, mas com áudio ambiente real, sem cortes cirúrgicos demais.</div>
+      <div class="beat-row"><span class="time">0-2s</span><div class="what"><b>Gancho</b><span>Corte direto pra primeira peça já no corpo/mão, sem introdução — quem assiste precisa ver o produto já no segundo 1.</span></div></div>
+      <div class="beat-row"><span class="time">2-7s</span><div class="what"><b>Peça 1</b><span>Movimento natural (virar, andar, ajustar o cabelo) com a peça — som ambiente da loja, sem narração por cima.</span></div></div>
+      <div class="beat-row"><span class="time">7-12s</span><div class="what"><b>Peça 2</b><span>Corte na batida da música, troca de peça — deixar um pequeno "erro" de transição, não precisa ser perfeito.</span></div></div>
+      <div class="beat-row"><span class="time">12-18s</span><div class="what"><b>Peça 3 + fechamento</b><span>Última peça, um sorriso real pra câmera, texto na tela simples: "qual você ficaria?" — pergunta que puxa comentário.</span></div></div>
+    </div>
+  </div>
+
+  <div class="script-card">
+    <div class="script-head">
+      <span class="n">Quebra-gelo 03</span>
+      <h3>Bastidor de verdade — abrindo caixa de fornecedor</h3>
+      <span class="dur">±20s · Reels vertical</span>
+    </div>
+    <div class="script-body">
+      <div class="script-goal"><b>Objetivo:</b> humanizar a marca mostrando o processo real antes da peça chegar na vitrine — gera expectativa genuína, não produzida.</div>
+      <div class="beat-row"><span class="time">0-4s</span><div class="what"><b>A caixa chegando</b><span>Câmera solta na mão, mostrando a caixa em cima do balcão, com comentário real tipo "gente, chegou a encomenda".</span></div></div>
+      <div class="beat-row"><span class="time">4-12s</span><div class="what"><b>Abertura ao vivo</b><span>Abrir a caixa na hora, sem cortar o momento de surpresa — se for ruim de ângulo, refilma inteiro, mas nunca finge a reação.</span></div></div>
+      <div class="beat-row"><span class="time">12-18s</span><div class="what"><b>Primeira peça em destaque</b><span>Pegar a peça que mais chamou atenção, mostrar de perto com comentário espontâneo sobre por que ela é especial.</span></div></div>
+      <div class="beat-row"><span class="time">18-20s</span><div class="what"><b>CTA</b><span>"Amanhã já tá na vitrine, quem quiser separar me chama" — cria urgência real, sem forçar contador ou texto piscando.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="slide-index">06 <span>/</span> 08 — Diretrizes de Gravação</div>
+  <div class="brandmark">Onevision</div>
+  <div class="section-head">
+    <div class="eyebrow">Antes de apertar gravar</div>
+    <h2 class="section-title">O que mantém o conteúdo <span class="accent">espontâneo de verdade.</span></h2>
+    <p class="lede">Checklist rápido pra quem grava na loja — não precisa decorar fala, precisa lembrar do espírito.</p>
+  </div>
+  <div class="rule-grid">
+    <div>
+      <div class="eyebrow" style="margin-bottom:1rem;">Evitar</div>
+      <ul class="rule-list rule-avoid">
+        <li>Ler texto decorado olhando pra um papel ou celular — sempre falar olhando a peça ou a câmera.</li>
+        <li>Regravar até sair "perfeito" — o segundo ou terceiro take mais natural quase sempre é melhor que o décimo.</li>
+        <li>Música genérica de trend sem relação com o momento — combinar o clima do áudio com o clima da cena.</li>
+        <li>Legenda enorme cobrindo o produto — texto deve ser apoio, não protagonista.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:1rem;">Manter</div>
+      <ul class="rule-list rule-do">
+        <li>Gravar em luz natural da loja, de manhã ou perto da vitrine — evitar luz de estúdio artificial.</li>
+        <li>Deixar sons reais entrarem (sino da porta, conversa ao fundo) — isso é prova de autenticidade.</li>
+        <li>Um "erro" por vídeo é bem-vindo: mão tremendo, riso, correção no meio da fala.</li>
+        <li>Terminar sempre com um convite direto e claro — direct, visita, ou "separei pra você".</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="s8">
+  <div class="slide-index" style="color:rgba(255,255,255,0.5);">07 <span style="color:#D8B8E8;">/</span> 08 — Vamos gravar</div>
+  <div class="eyebrow">Próximo passo</div>
+  <h2>O feed vai parar de parecer anúncio. <em>Vai parecer a Espaço das Divas de verdade.</em></h2>
+  <p>A partir da aprovação, gravamos os 3 quebra-gelo na primeira semana e damos início ao calendário completo — ajustando o ritmo conforme o engajamento real responde.</p>
+</section>
+
+<footer>
+  <span>Created by <span class="mark">Onevision</span></span>
+  <span>© 2026 Todos os direitos reservados — Espaço das Divas</span>
+</footer>
+
+</body>
+</html>
